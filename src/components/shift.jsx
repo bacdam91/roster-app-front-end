@@ -23,17 +23,9 @@ class Shift extends Component {
 	handleNameChange = event => {
 		const { value } = event.target;
 		const pharmacist = { ...this.state.pharmacist };
-		const nameArray =
-			value.split(" ").length > 1 && value.slice(-1) !== " "
-				? value.split(" ")
-				: [value];
-		// console.log(nameArray);
-		pharmacist.firstname =
-			nameArray[0].slice(0, 1).toUpperCase() + nameArray[0].slice(1);
-		pharmacist.lastname =
-			nameArray[1] !== undefined ? nameArray[1].toUpperCase() : "";
-
-		// console.log(pharmacist);
+		const nameArray = this.splitFullname(value);
+		this.assignFirstname(pharmacist, nameArray);
+		this.assignLastname(pharmacist, nameArray);
 		this.setState({ pharmacist });
 	};
 
@@ -44,6 +36,22 @@ class Shift extends Component {
 	handleEndTimeChange = event => {
 		console.log("Changing end time...");
 	};
+
+	assignLastname(pharmacist, nameArray) {
+		pharmacist.lastname =
+			nameArray[1] !== undefined ? nameArray[1].toUpperCase() : "";
+	}
+
+	assignFirstname(pharmacist, nameArray) {
+		pharmacist.firstname =
+			nameArray[0].slice(0, 1).toUpperCase() + nameArray[0].slice(1);
+	}
+
+	splitFullname(value) {
+		return value.split(" ").length > 1 && value.slice(-1) !== " "
+			? value.split(" ")
+			: [value];
+	}
 
 	render() {
 		const { startTime, endTime } = this.state.pharmacist;
