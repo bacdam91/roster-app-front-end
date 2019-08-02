@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import NameInput from "./nameInput";
+import StartTimeInput from "./startTimeInput";
+import EndTimeInput from "./endTimeInput";
 
 class Shift extends Component {
 	state = {
@@ -18,12 +21,12 @@ class Shift extends Component {
 	};
 
 	handleNameChange = event => {
+		const { value } = event.target;
 		const pharmacist = { ...this.state.pharmacist };
 		const nameArray =
-			event.target.value.split(" ").length > 1 &&
-			event.target.value.slice(-1) !== " "
-				? event.target.value.split(" ")
-				: [event.target.value];
+			value.split(" ").length > 1 && value.slice(-1) !== " "
+				? value.split(" ")
+				: [value];
 		// console.log(nameArray);
 		pharmacist.firstname =
 			nameArray[0].slice(0, 1).toUpperCase() + nameArray[0].slice(1);
@@ -48,36 +51,25 @@ class Shift extends Component {
 
 		return (
 			<div onDoubleClick={this.handleEdit} style={{ cursor: "pointer" }}>
-				<span hidden={isEditable ? "hidden" : ""}>
-					{this.formatFullNameOfficial()}
-				</span>
-				<input
-					onChange={this.handleNameChange}
-					name="fullname"
-					type="text"
-					value={this.formatFullName()}
-					hidden={isEditable ? "" : "hidden"}
+				<NameInput
+					fullnameOfficial={this.formatFullNameOfficial()}
+					fullname={this.formatFullName()}
+					onNameChange={this.handleNameChange}
+					isEditable={isEditable}
 				/>
-				<span hidden={isEditable ? "hidden" : ""}>
-					{this.formatTime(startTime)}
-				</span>
-				<input
-					onChange={this.handleStartTimeChange}
-					name="startTime"
-					type="text"
-					value={this.formatTime(startTime)}
-					hidden={isEditable ? "" : "hidden"}
+
+				<StartTimeInput
+					isEditable={isEditable}
+					onStartTimeChange={this.handleStartTimeChange}
+					startTime={this.formatTime(startTime)}
 				/>
-				<span hidden={isEditable ? "hidden" : ""}>
-					{this.formatTime(endTime)}
-				</span>
-				<input
-					onChange={this.handleEndTimeChange}
-					name="endTime"
-					type="text"
-					value={this.formatTime(endTime)}
-					hidden={isEditable ? "" : "hidden"}
+
+				<EndTimeInput
+					isEditable={isEditable}
+					onEndTimeChange={this.handleEndTimeChange}
+					endTime={this.formatTime(endTime)}
 				/>
+
 				<button
 					hidden={isEditable ? "" : "hidden"}
 					onClick={this.handleEdit}
