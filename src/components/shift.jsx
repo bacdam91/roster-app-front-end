@@ -23,28 +23,47 @@ class Shift extends Component {
 	handleNameChange = event => {
 		const { value } = event.target;
 		const pharmacist = { ...this.state.pharmacist };
-		const nameArray = this.splitFullname(value);
-		this.assignFirstname(pharmacist, nameArray);
-		this.assignLastname(pharmacist, nameArray);
+		const nameComponents = this.splitFullname(value);
+		this.assignFirstname(pharmacist, nameComponents);
+		this.assignLastname(pharmacist, nameComponents);
 		this.setState({ pharmacist });
 	};
 
 	handleStartTimeChange = event => {
-		console.log("Changing start time...");
+		const { value } = event.target;
+		const pharmacist = { ...this.state.pharmacist };
+		const startTime = new Date(pharmacist.startTime);
+		const date = startTime.getUTCDate();
+		const year = startTime.getUTCFullYear();
+		const month = startTime.getUTCMonth();
+		const hour = startTime.getUTCHours();
+		const minute = startTime.getUTCMinutes();
+
+		const newStartTime = new Date(
+			Date.UTC(year, month, date, hour, minute, 0, 0)
+		);
+
+		console.log(newStartTime.toUTCString());
+		// pharmacist.startTime = value;
+		// console.log(pharmacist);
+		// this.setState({ pharmacist });
 	};
 
 	handleEndTimeChange = event => {
 		console.log("Changing end time...");
 	};
 
-	assignLastname(pharmacist, nameArray) {
+	assignLastname(pharmacist, nameComponents) {
 		pharmacist.lastname =
-			nameArray[1] !== undefined ? nameArray[1].toUpperCase() : "";
+			nameComponents[1] !== undefined
+				? nameComponents[1].toUpperCase()
+				: "";
 	}
 
-	assignFirstname(pharmacist, nameArray) {
+	assignFirstname(pharmacist, nameComponents) {
 		pharmacist.firstname =
-			nameArray[0].slice(0, 1).toUpperCase() + nameArray[0].slice(1);
+			nameComponents[0].slice(0, 1).toUpperCase() +
+			nameComponents[0].slice(1);
 	}
 
 	splitFullname(value) {
