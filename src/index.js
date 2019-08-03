@@ -4,9 +4,9 @@ import "./index.css";
 // import App from "./App.jsx";
 import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.css";
-import Shift from "./components/shift";
+import Shifts from "./components/shifts";
 
-ReactDOM.render(<Shift />, document.getElementById("root"));
+ReactDOM.render(<Shifts />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
