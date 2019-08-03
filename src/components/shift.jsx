@@ -1,70 +1,60 @@
-import React, { Component } from "react";
+import React from "react";
 
-class Shift extends Component {
-	state = {
-		inputValue: ""
-	};
+const Shift = props => {
+	const {
+		shift,
+		onEditable,
+		outputDisplay,
+		onInputChange,
+		onSaveBtnClick,
+		onDelete
+	} = props;
+	const { isEditable, inputValue } = shift;
 
-	componentDidMount() {
-		const inputValue = this.formatOutput(this.props.shift, "space");
-		this.setState({ inputValue });
-	}
+	return (
+		<div
+			style={{ cursor: "pointer" }}
+			onDoubleClick={() => {
+				onEditable(shift);
+			}}
+		>
+			<span hidden={isEditable ? "hidden" : ""}>{outputDisplay}</span>
 
-	formatOutput = (shift, style = "") => {
-		let separator = "-";
-		if (style === "space") {
-			separator = " ";
-		}
-
-		const { firstname, lastname, startTime, endTime } = shift;
-		return `${firstname} ${lastname} ${this.formatTime(
-			startTime.hour,
-			startTime.minute,
-			style
-		) +
-			separator +
-			this.formatTime(endTime.hour, endTime.minute, style)}
-		`;
-	};
-
-	formatTime = (hr, min, style = "") => {
-		let separator = ":";
-		if (style === "space") {
-			separator = "";
-		}
-		return (
-			(hr < 10 ? "0" + hr : hr) + separator + (min < 10 ? "0" + min : min)
-		);
-	};
-
-	handleInputChange = event => {
-		const inputValue = event.target.value.trim();
-		this.setState({ inputValue });
-	};
-
-	render() {
-		const { inputValue } = this.state;
-		const { shift } = this.props;
-
-		return (
-			<div style={{ cursor: "pointer" }}>
-				<span>{this.formatOutput(shift)}</span>
-				<input
-					type="text"
-					defaultValue={inputValue}
-					onChange={this.handleInputChange}
-				/>
-				<button
-					onClick={() => this.props.onSaveBtnClick(shift, inputValue)}
-					className="btn btn-primary btn-sm"
-				>
-					Save
-				</button>
-				<button className="btn btn-warning btn-sm">Cancel</button>
-				<button className="btn btn-danger btn-sm">Remove</button>
-			</div>
-		);
-	}
-}
+			<input
+				type="text"
+				defaultValue={inputValue}
+				onChange={event => {
+					onInputChange(event, shift);
+				}}
+				hidden={isEditable ? "" : "hidden"}
+			/>
+			<button
+				onClick={() => onSaveBtnClick(shift, inputValue)}
+				className="btn btn-primary btn-sm"
+				hidden={isEditable ? "" : "hidden"}
+			>
+				Save
+			</button>
+			<button
+				className="btn btn-warning btn-sm"
+				hidden={isEditable ? "" : "hidden"}
+				onClick={() => {
+					onEditable(shift);
+				}}
+			>
+				Cancel
+			</button>
+			<button
+				className="btn btn-danger btn-sm"
+				hidden={isEditable ? "" : "hidden"}
+				onClick={() => {
+					onDelete(shift);
+				}}
+			>
+				Remove
+			</button>
+		</div>
+	);
+};
 
 export default Shift;
